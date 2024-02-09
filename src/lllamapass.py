@@ -22,11 +22,10 @@ from utils import *  # Assuming this includes necessary utilities like PasswordD
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config_path", help="path to yaml config", type=str, required=True)
     parser.add_argument("--subsample", help="subsample the dataset to this number of entries", type=int, default=-1)
     args = parser.parse_args()
 
-    with open(args.config_path) as f:
+    with open("configs/passgpt-16chars.yaml") as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
 
     args = dotdict(config["config_args"])
@@ -45,8 +44,7 @@ if __name__ == "__main__":
     print("===> Loading tokenizer")
 
     tokenizer = RobertaTokenizer.from_pretrained(
-        '/drive/MyDrive/passgpt_llama2/tokenizer/byte_bpe_tokenizer_98/vocab.json',
-        '/drive/MyDrive/passgpt_llama2/tokenizer/byte_bpe_tokenizer_98/merges.txt',
+        '/drive/MyDrive/passgpt_llama2/tokenize_old/byte_bpe_tokenizer_98/',
 )
 
     # Define dataloader
