@@ -42,9 +42,9 @@ if __name__ == "__main__":
     parser.add_argument("--train_path", help="path to the training dataset", type=str, required=True)
     parser.add_argument("--output_path", help="path where to store the tokenizer files", type=str, required=True)
     args = parser.parse_args()
-    
+
     print("===> Reading passwords")
-    
+
     with open(args.train_path, "r", encoding="utf-8") as f:
         lines = f.read().splitlines()
 
@@ -53,7 +53,7 @@ if __name__ == "__main__":
     for p in lines:
         if all(32 < ord(c) < 128 for c in p):
             ascii_printable.append(p)
-        
+
     # Log information about your data
     all_chars = ''.join(ascii_printable)  # concatenate all strings into a single string
     unique_chars = set(all_chars)
@@ -68,24 +68,20 @@ if __name__ == "__main__":
         "<unk>",
         "<mask>",
     ]
-    
+
     # Create BPE tokenizer
     print("===> Training tokenizer")
     tokenizer = PassTokenizer()
-    
+
     # Customize training
     tokenizer.train_from_iterator(ascii_printable, vocab_size=count+len(special_tokens), min_frequency=1, special_tokens=special_tokens)
 
     print("===> Tokenizer trained with vocabulary")
     vocab = tokenizer.get_vocab()
     print(sorted(vocab, key=lambda x: vocab[x]))
-    
+
     Path(os.path.join(args.output_path, f"byte_bpe_tokenizer_{count+len(special_tokens)}")).mkdir(parents=True, exist_ok=True)
-       
+
     # Export
     tokenizer.save_model(os.path.join(args.output_path, f"byte_bpe_tokenizer_{count+len(special_tokens)}"))
     print("===> Tokenizer exported succesfully")
-    
-    
-        
-    
